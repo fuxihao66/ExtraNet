@@ -41,7 +41,7 @@ The testing script is: Model/inference.py.
 python inference.py
 ```
 ## Integration into Unreal Engine
-Coming soon....
+https://github.com/fuxihao66/UnrealEngine/tree/UE425ExtraNet_active (still under development..)
 
 
 ## Citation
