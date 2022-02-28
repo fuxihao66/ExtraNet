@@ -42,7 +42,7 @@ python inference.py
 ```
 ## Integration into Unreal Engine
 https://github.com/fuxihao66/UnrealEngine/tree/UE425ExtraNet_active (still under development..)
-
+(before accessing this repo, please refer to https://www.unrealengine.com/zh-CN/ue4-on-github to associate your GitHub account with your Unreal Engine account)
 
 ## Citation
 If you find the tools or codes useful in your research, please cite:
