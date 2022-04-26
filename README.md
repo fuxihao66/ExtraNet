@@ -5,7 +5,7 @@ This is the repository for the tools and network source codes for our paper [Ext
 We provide a custom built Unreal Engine for generating dataset. Any Unreal Engine scenes requiring engine version <= 4.25.3 can be opened by our build.
 The link of our build: https://drive.google.com/drive/folders/1ZUbct6Z2T3gGhbxjQU0-u2PPflwYv-UZ?usp=sharing
 
-Make sure to enable DX12 RHI and Ray tracing in Unreal settings.
+Make sure to enable DX12 RHI and Ray tracing in Unreal settings, and enable stencil in project setting: project setting -> Rendering::Postprocessing -> Enable with Stencil. For dynamic objects, make sure to enable *Render Custom depth pass* and set Custom Depth Stencil Value(any value larger than 0) in object properties.
 
 This custom build is modified by Hengjun Ma.
 ### Generate raw data
