@@ -47,7 +47,7 @@ https://github.com/fuxihao66/UnrealEngine/tree/UE425ExtraNet_active (still under
 
 (before accessing this repo, please refer to https://www.unrealengine.com/ue4-on-github to associate your GitHub account with your Unreal Engine account)
 ## TensorRT Inference
-For network inference speed test, please refer to https://github.com/fuxihao66/OnnxGeneration.
+For network inference speed test, please refer to https://github.com/fuxihao66/ExtraNetTRTInference.
 ## Citation
 If you find the tools or codes useful in your research, please cite:
 ```
