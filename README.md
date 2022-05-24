@@ -7,7 +7,7 @@ The link of our build: https://drive.google.com/drive/folders/1ZUbct6Z2T3gGhbxjQ
 
 Make sure to enable DX12 RHI and Ray tracing in Unreal settings, and enable stencil in project setting: project setting -> Rendering::Postprocessing -> Enable with Stencil. 
 
-For dynamic objects, make sure to enable *Render Custom depth pass* and set Custom Depth Stencil Value(any value larger than 0) in object properties.
+For dynamic objects, make sure to enable *Render Custom depth pass* and set Custom Depth Stencil Value(any value larger than 0, and different objects should have different values) in object properties.
 
 This custom build is modified by Hengjun Ma.
 ### Generate raw data
