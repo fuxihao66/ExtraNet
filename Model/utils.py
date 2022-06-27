@@ -65,8 +65,9 @@ def ReadData(path,augment=True):
     roughness = roughness.astype(np.float32)
     metalic = metalic.astype(np.float32)
 
-    depth = (depth - depth.min()) / (depth.max() - depth.min() + 1e-6)
+    
     depth[depth > 100] = 0.0
+    depth = (depth - depth.min()) / (depth.max() - depth.min() + 1e-6)
 
     
     if augment:

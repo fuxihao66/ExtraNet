@@ -4,7 +4,7 @@ mSkip=True
 mLossHoleArgument=1
 mLossHardArgument=1
 p="C:/Users/admin/"
-basePaths = [p+"Medieval/Medieval_0/"]
+basePaths = [p+"Medieval/Medieval_0/"]  ## Path to all compressed data set folders
 
 
 TestMetalicPrefix = "Metallic"

@@ -35,6 +35,7 @@ The training script is: Model/train.py.
 ```python
 python train.py
 ```
+(Before running this script, make sure to set **basePaths** in config.py.)
 ### Testing
 The testing script is: Model/inference.py.
 ```python
