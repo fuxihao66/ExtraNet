@@ -4,15 +4,16 @@ import os
 import sys
 import glob
 from multiprocessing import Process
-# basePath0 = "D:/training_set_v2/WithoutDemodulate/MedievalOrigin/"
-basePath1 = "I:/"
+
 
 
 threadNum = 4
-
-dirList = [basePath1+"MD_Train_6", basePath1+"MD_Train_2", basePath1+"MD_Train_5", basePath1+"MD_Train_7"]
-
+compressedOutputDir = "I:/medieval_compressed/"
+dirList = ["I:/MD_Train_6","I:/MD_Train_4","I:/MD_Train_5"]
 ScenePrefix = "MedievalDocks"
+
+
+
 WarpPrefix = "Warp"
 GtPrefix = "GT"
 NormalPrefix = "WorldNormal"
@@ -146,7 +147,7 @@ def CompressRange(di):
 
 if __name__ == "__main__":
     for di in dirList:
-        MergeFile(di, "I:/medieval_compressed/"+di.split("/")[-1]+"/")
+        MergeFile(di, compressedOutputDir+di.split("/")[-1]+"/")
     # for di in dirList:
     #     CompressRange(di)
 
