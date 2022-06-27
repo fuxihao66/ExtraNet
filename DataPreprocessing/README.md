@@ -19,6 +19,7 @@ Before running this script, the settings at the beginning should be modified:
 ## Test sets
 For test sets, only **preprocess.py** is needed.
 
+(When doing inference, the skybox needs to be combined with inference output to get the final extrapolated frame (like the "Skybox.exr" file in the ExtraNet/TestData folder. For simplicity, this buffer will not be generated when exporting data, and the skybox can be extracted from "PreTonemapHDRColor.exr" by counting only those pixels with (-1,-1,-1) normals.)
 
 ## About demodulation
 The **preprocess_glossiness.py** script is an alternative option for generate images. The only difference between **preprocess.py** and **preprocess_glossiness.py** is the demodulation algorithm.
