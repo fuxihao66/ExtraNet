@@ -1,0 +1,90 @@
+#include "TAACommon.ush"
+
+#define TILE_SIZE 8
+
+Texture2D SceneDepthTexture;
+Texture2D SceneVelocityTexture;
+
+SCREEN_PASS_TEXTURE_VIEWPORT(InputInfo)
+
+RWTexture2D<float4> DilatedVelocityOutput;
+// RWTexture2D<float> ClosestDepthOutput;
+// RWTexture2D<uint> PrevUseCountOutput;
+// RWTexture2D<uint> PrevClosestDepthOutput;
+
+[numthreads(TILE_SIZE, TILE_SIZE, 1)]
+void MainCS(
+	uint2 GroupId : SV_GroupID,
+	uint GroupThreadIndex : SV_GroupIndex)
+{
+    uint2 DispatchThreadId = (
+		ZOrder2D(GroupThreadIndex, log2(TILE_SIZE)) +
+		GroupId * uint2(TILE_SIZE, TILE_SIZE));
+
+	uint2 InputPixelPos = min(DispatchThreadId.xy + InputInfo_ViewportMin, InputInfo_ViewportMax - 1);
+    bool bInsideViewport = all(InputPixelPos < InputInfo_ViewportMax);
+
+    float2 ViewportUV = float2(DispatchThreadId) * InputInfo_ViewportSizeInverse;
+	float2 ScreenPos = ViewportUVToScreenPos(ViewportUV);
+    // float2 ScreenPos = SvPositionToScreenPosition(float4(InputPixelPos.xy, 0, 1)).xy;
+
+	BRANCH
+    if (bInsideViewport)
+    {
+        float DeviceZ = SceneDepthTexture[InputPixelPos].r;
+
+        float ClosestDeviceZ = DeviceZ;
+        float2 VelocityPixelOffset = float2(0.0, 0.0);
+        
+        
+        FindClosestDepthOffset(SceneDepthTexture, InputPixelPos, DeviceZ, 1, /* out */ VelocityPixelOffset, /* out */ ClosestDeviceZ);
+
+        // Compute final screen vecocity.
+        float2 FinalScreenVelocity = SceneVelocityTexture[uint2(InputPixelPos + VelocityPixelOffset)].xy;
+        // float2 ScreenPos = SvPositionToScreenPosition(float4(InputPixelPos.xy, 0, 1)).xy;
+        float2 PrevScreenPos = float2(0 ,0);
+        
+        if (all(FinalScreenVelocity.xy > 0))
+        {
+            FinalScreenVelocity = DecodeVelocityFromTexture(FinalScreenVelocity);
+        }
+        else
+        {
+            float3 PosN = float3(ScreenPos, ClosestDeviceZ);
+            float4 ThisClip = float4(PosN, 1);
+            float4 PrevClip = mul(ThisClip, View.ClipToPrevClip);
+            PrevScreenPos = PrevClip.xy / PrevClip.w;
+            
+	        FinalScreenVelocity = ScreenPos - PrevScreenPos;
+        }
+        
+        // float2 PrevInputBufferUV = ScreenPosToViewportUV(PrevScreenPos);
+
+        // FBilinearSampleInfos BilinearInter = GetBilinearSampleLevelInfos(PrevInputBufferUV, InputInfo_Extent, InputInfo_ExtentInverse);
+
+        // UNROLL_N(4)
+        // for (uint i = 0; i < 4; i++)
+        // {
+
+        //     uint2 PixelPos = GetSamplePixelCoord(BilinearInter, i);
+
+        //     uint FinalAdd = 1;
+            
+        //     if (all(PixelPos >= InputInfo_ViewportMin && PixelPos < InputInfo_ViewportMax))
+        //     {
+        //         InterlockedAdd(PrevUseCountOutput[PixelPos], FinalAdd);
+
+        //         if (FinalAdd > 0)
+        //         {
+        //             InterlockedMax(PrevClosestDepthOutput[PixelPos], f32tof16(ClosestDeviceZ));
+        //         }
+        //     }
+        // }
+
+        float2 OutVelocity = FinalScreenVelocity * 0.5 * View.ViewSizeAndInvSize.xy;
+
+        DilatedVelocityOutput[InputPixelPos].xyzw = float4(OutVelocity.xy, 0, 1);
+		// ClosestDepthOutput[InputPixelPos] = ClosestDeviceZ;
+
+    }
+}

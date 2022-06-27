@@ -1,0 +1,67 @@
+#include "Common.ush"
+#include "TextureSampling.ush"
+#include "ScreenPass.ush"
+
+uint2 ZOrder2D(uint Index, const uint SizeLog2)
+{
+	uint2 Coord = 0; 
+
+	UNROLL
+	for (uint i = 0; i < SizeLog2; i++)
+	{
+		Coord.x |= ((Index >> (2 * i + 0)) & 0x1) << i;
+		Coord.y |= ((Index >> (2 * i + 1)) & 0x1) << i;
+	}
+
+	return Coord;
+}
+
+void FindClosestDepthOffset(Texture2D Texture, uint2 PixelPos, float DeviceZ, int PixelRadius, out float2 VelocityPixelOffset, out float ClosestDeviceZ)
+{
+	float4 Depths;
+	Depths.x = Texture[int2(PixelPos) + int2(-PixelRadius, -PixelRadius)].r;
+	Depths.y = Texture[int2(PixelPos) + int2( PixelRadius, -PixelRadius)].r;
+	Depths.z = Texture[int2(PixelPos) + int2(-PixelRadius,  PixelRadius)].r;
+	Depths.w = Texture[int2(PixelPos) + int2( PixelRadius,  PixelRadius)].r;
+
+	float2 DepthOffset = float2(PixelRadius, PixelRadius);
+	float DepthOffsetXx = float(PixelRadius);
+	// Nearest depth is the largest depth (depth surface 0=far, 1=near).
+	if(Depths.x > Depths.y) 
+	{
+		DepthOffsetXx = -PixelRadius;
+	}
+	if(Depths.z > Depths.w) 
+	{
+		DepthOffset.x = -PixelRadius;
+	}
+	float DepthsXY = max(Depths.x, Depths.y);
+	float DepthsZW = max(Depths.z, Depths.w);
+	if (DepthsXY > DepthsZW) 
+	{
+		DepthOffset.y = -PixelRadius;
+		DepthOffset.x = DepthOffsetXx; 
+	}
+	float DepthsXYZW = max(DepthsXY, DepthsZW);
+	
+	ClosestDeviceZ = DeviceZ;
+	VelocityPixelOffset = 0.0;
+
+	// If the pixel is closer in neighborhood, take it.
+	FLATTEN
+	if(DepthsXYZW > DeviceZ)
+	{
+		VelocityPixelOffset = DepthOffset;
+		ClosestDeviceZ = DepthsXYZW;
+	}
+}
+
+float2 ComputeStaticVelocity(float2 ScreenPos, float DeviceZ)
+{
+	float3 PosN = float3(ScreenPos, DeviceZ);
+
+	float4 ThisClip = float4(PosN, 1);
+	float4 PrevClip = mul( ThisClip, View.ClipToPrevClip );
+	float2 PrevScreen = PrevClip.xy / PrevClip.w;
+	return PosN.xy - PrevScreen;
+}
