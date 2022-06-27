@@ -24,9 +24,16 @@ For test sets, only **preprocess.py** is needed.
 The **preprocess_glossiness.py** script is an alternative option for generate images. The only difference between **preprocess.py** and **preprocess_glossiness.py** is the demodulation algorithm.
 
 In **preprocess.py**:
-$$\text{img}_{\text{demodu}} = \text{img}_{\text{pretonemap}} / \text{img}_{\text{basecolor}}.$$
+$$
+\text{img}_{\text{demodu}} = \text{img}_{\text{pretonemap}} / \text{img}_{\text{basecolor}}.
+$$
+
 In **preprocess_glossiness.py**:
-$$\text{img}_{\text{demodu}} = \text{img}_{\text{pretonemap}} / (\text{img}_{\text{basecolor}} + \text{img}_{\text{sepcular}} * 0.08 * ( 1 - \text{img}_{\text{metallic}} )).$$
+$$
+\text{img}_{\text{demodu}} = \text{img}_{\text{pretonemap}} / (\text{img}_{\text{basecolor}} + \text{img}_{\text{sepcular}} * 0.08 * ( 1 - \text{img}_{\text{metallic}} )).
+$$
+
+
 
 This script works better when glossy materials take a huge part in the scene (and when BaseColor is totally dark). The scene **Bunker** is operated with this script. When using this script, the buffer **Specular** should be added when exporting data from UE.
 
