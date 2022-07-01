@@ -17,7 +17,9 @@ DEBUG_OCC = False
 DEBUG_MV = True
 
 WARP_NUM = 5
-Thread_NUM = 8
+
+
+Thread_NUM = 8  # make sure sampleNumber / Thread_NUM > 5
 
 class GlobalInfo():
 
