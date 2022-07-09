@@ -13,8 +13,9 @@ The link of our build: https://drive.google.com/drive/folders/1ZUbct6Z2T3gGhbxjQ
 To make sure the exported data can be handled by ExtraNet itself, please follow the instructions below:
 1. Sprites, decals, particle effects, volumetric effects, tranlucent effects should removed from scenes (because of lacking either albedo or motion vector information).
 2. Postprocessing should be disabled when exporting data to make sure the images exported is "Pre-postprocess" ones.
-3. Make sure to enable DX12 RHI and Ray Tracing in Unreal settings. (Honestly, this step should have not been compulsory, but currently because of some unknown reasons, if Ray Tracing is not enabled, the shading effects will be incorrect.)
-4. Make sure to enable stencil in project setting: project setting -> Rendering::Postprocessing -> Enable with Stencil. And for dynamic objects, make sure to enable *Render Custom depth pass* and set Custom Depth Stencil Value(any value larger than 0, and different objects should have different values) in object properties.
+3. Make sure to enable DX12 RHI.
+4. Make sure to enable Ray Tracing in Unreal settings. (Honestly, this step should have not been compulsory, but currently because of some unknown reasons, if Ray Tracing is not enabled, the shading effects will be incorrect.)
+5. Make sure to enable stencil in project setting: project setting -> Rendering::Postprocessing -> Enable with Stencil. And for dynamic objects, make sure to enable *Render Custom depth pass* and set Custom Depth Stencil Value(any value larger than 0, and different objects should have different values) in object properties.
 
 
 ### Generate raw data
