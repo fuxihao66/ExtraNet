@@ -176,8 +176,40 @@ if (PassSequence.IsEnabled(EPass::VisualizeGBufferOverview))
 		PassInputs.bDumpToFile = bVisualizeGBufferDumpToFile;
 		PassInputs.bOutputInHDR = bOutputInHDR;
 
-		PassInputs.SceneDepth = ;
+		PassInputs.SceneDepth = SceneDepth;
 
 		SceneColor = AddVisualizeGBufferOverviewPass(GraphBuilder, View, PassInputs);
 	}
+```
+8. Modify Engine/Source/Runtime/Renderer/Private/PostProcess/PostProcessVisualizeBuffer.h
+```
+struct FVisualizeGBufferOverviewInputs
+{
+	FScreenPassRenderTarget OverrideOutput;
+
+	// The current scene color being processed.
+	FScreenPassTexture SceneColor;
+	FScreenPassTexture SceneDepth;
+
+	// The HDR scene color immediately before tonemapping is applied.
+	FScreenPassTexture SceneColorBeforeTonemap;
+
+	// The scene color immediately after tonemapping is applied.
+	FScreenPassTexture SceneColorAfterTonemap;
+
+	// The separate translucency texture to composite.
+	FScreenPassTexture SeparateTranslucency;
+
+	// The original scene velocity texture to composite.
+	FScreenPassTexture Velocity;
+
+	// Dump targets to files on disk.
+	bool bDumpToFile = false;
+
+	// Render an overview of the GBuffer targets.
+	bool bOverview = false;
+
+	// Whether to emit outputs in HDR.
+	bool bOutputInHDR = false;
+};
 ```
