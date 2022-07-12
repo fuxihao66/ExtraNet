@@ -16,6 +16,10 @@ MotionVector=(Material="/Engine/BufferVisualization/MotionVector.MotionVector", 
 ```
 6. Modify the AddVisualizeGBufferOverviewPass function in Engine/Source/Runtime/Renderer/Private/PostProcess/PostProcessVisualizeBuffer.cpp:
 ```
+#include "PostProcess/MotionVectorAndUsedCount.h"
+
+...
+
 FScreenPassTexture AddVisualizeGBufferOverviewPass(
 	FRDGBuilder& GraphBuilder,
 	const FViewInfo& View,
