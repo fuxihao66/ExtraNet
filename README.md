@@ -47,7 +47,6 @@ https://github.com/fuxihao66/UnrealEngine/tree/UE425ExtraNet_active (still under
 
 (before accessing this repo, please refer to https://www.unrealengine.com/ue4-on-github to associate your GitHub account with your Unreal Engine account)
 
-**Update**: A new plugin of UE to support ExtraNet inference with DirectML: https://github.com/fuxihao66/OnnxDirectmlInference.
 ## TensorRT Inference
 For network inference speed test, please refer to https://github.com/fuxihao66/ExtraNetTRTInference.
 ## Citation
