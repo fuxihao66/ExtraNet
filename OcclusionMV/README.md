@@ -3,7 +3,7 @@
 ## How to get forward mv with backward mv
 Assuming the pixel $x_{i}$ at frame i and the corresponding pixel $x_{i-1}$ at frame i-1. To get the occlusion mv at frame i, we need the backward mv from i to i-1 and forward mv from i-1 to i. These vectors are basically the same in both length and direction. The only difference is **where** this vector is written to. For backward mv, it is written to pixel $x_{i}$, and for forward mv, it is at pixel $x_{i-1}$.
 
-To get forward mv, we can read the backward mv at pixel $x_{i}$, finding the pixel $x_{i-1}$ by: $x_{i-1} = x_{i} - {mv}_i$, and write this vector to pixel $x_{i-1}$. This operation is usually called **splatting**. We also implement occlusion mv with this method in our data processing script. 
+To get forward mv, we can read the backward mv at pixel $x_{i}$, finding the pixel $x_{i-1}$ by: $ x_{i-1} = x_{i} - {mv}_i $, and write this vector to pixel $x_{i-1}$. This operation is usually called **splatting**. We also implement occlusion mv with this method in our data processing script. 
 
 When the pixel $x_{i-1}$ is splatted to frame i-1, there are two problems need to be solved:
 1. $x_{i-1}$ might not be situated at the center of pixel; 
