@@ -1,0 +1,82 @@
+#include "TAACommon.ush"
+
+SCREEN_PASS_TEXTURE_VIEWPORT(InputInfo)
+
+Texture2D<float2> gMotionVector;
+Texture2D gDepth;
+// Texture2D<float> gSplatDepth; 
+Buffer<int> gSplatDepth; 
+// RWBuffer<int> gForwardMotionVector; 
+RWByteAddressBuffer gForwardMotionVector; 
+// RWTexture2D<float2> gForwardMotionVector;
+
+#define NV_SHADER_EXTN_SLOT u7
+#include "/Engine/Shared/ThirdParty/NVIDIA/nvHLSLExtns.h"
+
+bool outside(int2 pixelPos, int2 dim){
+	// BRANCH
+    if (pixelPos.x < 0 || pixelPos.y < 0){
+        return true;
+    }
+
+	// BRANCH
+    if (pixelPos.x >= dim.x || pixelPos.y >= dim.y){
+        return true;
+    }
+
+    return false;
+}
+
+uint2 EncodeR32G32ToUInt32(float2 mv, uint2 viewportSize){
+	//return asuint(mv) & 3221225471;
+
+	// 0~2*viewportSize
+	return uint2((mv + viewportSize) * 1000000);
+
+}
+
+[numthreads(16, 16, 1)]
+void MyMain(
+    uint2 GroupId : SV_GroupID,
+	uint GroupThreadIndex : SV_GroupIndex)
+{
+    int2 PixelPos = (
+		ZOrder2D(GroupThreadIndex, log2(1)) +
+		GroupId * uint2(1, 1));
+    int2 texDim = InputInfo_ViewportMax;
+
+    //float2 prevPixelPos = PixelPos - gMotionVector[PixelPos];
+	float2 originMv = gMotionVector[PixelPos].xy;
+	float2 prevPixelPos = PixelPos - float2(originMv.x, -1 * originMv.y);
+    
+    int2 prevPixelPosQuad[] = { int2(prevPixelPos), 
+                                int2(prevPixelPos.x+1, 
+                                     prevPixelPos.y),
+                                int2(prevPixelPos.x, 
+                                     prevPixelPos.y+1), 
+                                int2(prevPixelPos.x+1, 
+                                     prevPixelPos.y+1) };
+
+    for (int i = 0; i < 4; i++){
+        int2 currPos = prevPixelPosQuad[i];
+        uint flattedIndex = currPos.y * texDim.x + currPos.x;
+
+        if (!outside(currPos, texDim)){
+
+			uint encodedCurrentDepth = gDepth[PixelPos].x * 0.00001 * 4294967294.0;
+			//if (encodedCurrentDepth >= gSplatDepth[flattedIndex])
+			if (encodedCurrentDepth <= gSplatDepth[flattedIndex])
+			{
+                // uint2 prevMv;
+
+				// InterlockedExchange(gForwardMotionVector[flattedIndex], EncodeR16G16ToInt32(gMotionVector[PixelPos].xy), prevMv);
+
+				NvInterlockedExchangeUint64(gForwardMotionVector, flattedIndex * 8, EncodeR32G32ToUInt32(gMotionVector[PixelPos].xy, texDim));
+
+                
+            }
+        }
+    }
+    
+}
+

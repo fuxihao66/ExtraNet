@@ -47,6 +47,9 @@ https://github.com/fuxihao66/UnrealEngine/tree/UE425ExtraNet_active (still under
 
 (before accessing this repo, please refer to https://www.unrealengine.com/ue4-on-github to associate your GitHub account with your Unreal Engine account)
 
+## About Occlusion MVs
+In the original paper "Temporally Reliable Motion Vectors for Real-time Ray Tracing", occlusion mv needs forward motion vectors, which requires rendering another forward pass. To alleviate computation cost, we splat backward motion vectors to get forward motion vectors. Details are shown in **OcclusionMV** folder.
+
 ## TensorRT Inference
 For network inference speed test, please refer to https://github.com/fuxihao66/ExtraNetTRTInference.
 ## Citation
