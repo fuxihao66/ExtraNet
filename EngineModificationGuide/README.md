@@ -2,7 +2,7 @@
 
 If you want to use scenes that only support higher version of Unreal Engine (like 4.27), you can try to follow the instructions below to modify the engine by yourselves.
 ## UE5
-0. Clone the modified version of UE: https://github.com/fuxihao66/UnrealEngine/tree/5.1
+0. Clone the modified version of UE: https://github.com/fuxihao66/UnrealEngine/tree/5.6_data_export
 1. Run the **Setup** and **GenerateProject** scripts
 2. Move ".uasset" files in ExtraNet/EngineModificationGuide/BufferVisualization to Engine/Content/BufferVisualization folder
 ## UE4
